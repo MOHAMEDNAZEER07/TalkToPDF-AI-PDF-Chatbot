@@ -2,7 +2,7 @@ from model_config import embedder, get_gemini_response
 from utils import extract_text_from_pdf, chunk_text
 
 import chromadb
-from chromadb.config import Settings
+import os
 
 client = chromadb.PersistentClient(path="./chroma_db")
 
@@ -12,16 +12,20 @@ if collection_name in [col.name for col in client.list_collections()]:
 else:
     collection = client.create_collection(name=collection_name)
 
-def ingest_pdf(path):
+def ingest_pdf(path, original_name=None):
     text = extract_text_from_pdf(path)
     chunks = chunk_text(text)
     embeddings = embedder.encode(chunks).tolist()
+
+    # Use original filename (without extension) as the base for deterministic
+    # chunk IDs so re-uploading the same PDF updates rather than duplicates.
+    pdf_name = os.path.splitext(original_name or os.path.basename(path))[0]
 
     for i, chunk in enumerate(chunks):
         collection.add(
             documents=[chunk],
             embeddings=[embeddings[i]],
-            ids=[str(i)]
+            ids=[f"{pdf_name}_chunk_{i}"]
         )
 
 def query_rag(user_query):

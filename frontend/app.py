@@ -23,12 +23,15 @@ if uploaded_file and "pdf_uploaded" not in st.session_state:
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
-# Chat UI
+# Render existing chat history
+for chat in st.session_state.chat_history:
+    with st.chat_message(chat["role"]):
+        st.markdown(chat["content"])
+
+# Chat input
 query = st.chat_input("Ask a question from your PDF...")
 
 if query:
-    # Display user message
-    st.chat_message("user").markdown(query)
     st.session_state.chat_history.append({"role": "user", "content": query})
 
     # Query backend
@@ -39,11 +42,6 @@ if query:
     except Exception as e:
         answer = f"❌ Error: {e}"
 
-    # Display assistant response
-    st.chat_message("assistant").markdown(answer)
     st.session_state.chat_history.append({"role": "assistant", "content": answer})
+    st.rerun()
 
-# Show chat history
-for chat in st.session_state.chat_history:
-    with st.chat_message(chat["role"]):
-        st.markdown(chat["content"])

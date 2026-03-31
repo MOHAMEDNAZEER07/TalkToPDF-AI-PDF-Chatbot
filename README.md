@@ -76,10 +76,12 @@ pip install -r requirements.txt
 
 ### 3. Configure environment variables
 
-Create a `.env` file:
+Create a `.env` file (use `.env.example` as a template):
 
 ```env
 GEMINI_API_KEY=your_google_gemini_api_key
+# Optional: comma-separated list of allowed frontend origins (defaults to http://localhost:8501)
+ALLOWED_ORIGINS=http://localhost:8501
 ```
 
 ### 4. Start the backend
@@ -91,10 +93,10 @@ uvicorn backend.main:app --reload
 ### 5. Launch the frontend
 
 ```bash
-streamlit run app.py
+streamlit run frontend/app.py
 ```
 
-> ⚠️ Make sure both `app.py` (frontend) and `backend/` (FastAPI backend) are in the root directory or appropriately routed.
+> ⚠️ Make sure both the FastAPI backend and the Streamlit frontend are running at the same time.
 
 ---
 
@@ -106,11 +108,12 @@ talktopdf/
 |   |──app.py                # Streamlit frontend
 ├── backend/
 │   ├── main.py                # FastAPI app
-│   ├── rag_core.py            # RAG logic
+│   ├── rag_engine.py          # RAG logic
 │   ├── utils.py               # Text extraction and chunking
 │   ├── model_config.py        # Gemini + embedder config
 ├── chroma_db/                 # Persistent vector DB storage
 ├── requirements.txt
+├── .env.example
 ├── .env
 └── README.md
 ```

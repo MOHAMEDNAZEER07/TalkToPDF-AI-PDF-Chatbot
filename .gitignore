@@ -15,6 +15,7 @@ venv/
 
 # Data
 chroma_db/
+data/
 *.pdf
 *.db
 *.sqlite3
