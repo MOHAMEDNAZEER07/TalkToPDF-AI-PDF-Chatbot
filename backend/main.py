@@ -18,6 +18,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/")
+def root():
+    return {"message": "TalkToPDF API is running"}
+
 class QueryRequest(BaseModel):
     query: str
 

@@ -1,9 +1,6 @@
 from sentence_transformers import SentenceTransformer
 import google.generativeai as genai
 import os
-from dotenv import load_dotenv
-
-load_dotenv()
 
 api_key = os.getenv("GEMINI_API_KEY")
 embedder = SentenceTransformer("all-MiniLM-L6-v2")
